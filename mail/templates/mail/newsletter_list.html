@@ -1,0 +1,35 @@
+{% extends 'mail/base.html' %}
+{% block content %}
+
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Сервис по отправке рассылок</h1>
+            <p class="lead text-muted">Отправка сообщений по всем регионам с возможностью отложенного отправления</p>
+            <p>
+                <a href="{% url 'mail:newsletter_create' %}" class="btn btn-primary my-2 form-control">Создать
+                    рассылку</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+{% for newsletter in object_list %}
+<div class="row text-center">
+        <div class="col-sm-5 mb-3 mb-sm-5">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ newsletter.subject| title }}</h4>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'mail:newsletter_detail' pk=newsletter.pk %}">
+                        <button type="button" class="btn btn-lg btn-block btn-light form-control">Посмотреть
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,26 @@
+from django import forms
+
+from mail.models import Newsletter, Message
+
+
+class StyleFormMixin(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field, forms.BooleanField):
+                field.widget.attrs['class'] = 'form-check-input'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+
+
+class NewsletterForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Newsletter
+        fields = ("frequency", "message", "status", )
+
+
+class MessageForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ("message", "subject",)
+
