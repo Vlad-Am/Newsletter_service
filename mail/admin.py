@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 
-from mail.models import Newsletter, Message
+from mail.models import Newsletter, Message, Client, Logs
 
 
 @admin.register(Message)
@@ -12,9 +12,19 @@ class MessageAdmin(admin.ModelAdmin):
 
 
 @admin.register(Newsletter)
-class MessageAdmin(admin.ModelAdmin):
-    list_display = ("owner", "datetime", "frequency", "status", "message",)
-    list_filter = ("owner", "frequency", "status", "message",)
-    search_fields = ("message", "owner",)
+class NewsletterAdmin(admin.ModelAdmin):
+    list_display = ("owner", "datetime_start_send", "frequency", "status", "message",)
+    list_filter = ("owner", "frequency", "status", "message", "client","datetime_start_send")
+    search_fields = ("message", "owner", "client",)
 
 
+@admin.register(Client)
+class ClientAdmin(admin.ModelAdmin):
+    list_display = ("name", "surname", "email",)
+    list_filter = ("email",)
+    search_fields = ("surname", "email",)
+
+
+@admin.register(Logs)
+class LogsAdmin(admin.ModelAdmin):
+    list_display = ('time_last_send', 'status', 'answer', "newsletter", "client")

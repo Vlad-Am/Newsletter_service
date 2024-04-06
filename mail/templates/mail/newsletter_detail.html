@@ -5,10 +5,22 @@
         <div class="col-4">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{ object.subject| title }} </h4>
+                    <h4 class="my-0 font-weight-normal">{{ object.message.subject| title }} </h4>
                 </div>
                 <div class="card-body">
-                    <h1 class="card-title pricing-card-title">{{ object.message }}</h1>
+                    <h5 class="card-title pricing-card-title">{{ object.message.message }}</h5>
+                    <h5 class="card-title pricing-card-title"> Дата создания рассылки: {{ object.datetime_create }}</h5>
+                    <h5 class="card-title pricing-card-title"> Частота отправки рассылки: {{ object.frequency }}</h5>
+                    <h5 class="card-title pricing-card-title"> Список клиентов для отправки рассылки:
+                        <ul>
+                            {% for value in object.client.all.values_list %}
+                            <oli>{{value.3 }}</oli>
+                            {% endfor%}
+                        </ul>
+                        {{ object.client.email }}</h5>
+                    <h5 class="card-title pricing-card-title"> Время старта рассылки: {{ object.datetime_start_send }}</h5>
+                    <h5 class="card-title pricing-card-title"> Время конца рассылки: {{ object.datetime_end_send }}</h5>
+
                     <div class="card-footer">
                         <a href="{% url 'mail:newsletter_update' object.pk %}">
                             <button type="button" class="btn mt-10 btn-outline-info form-control">

@@ -11,12 +11,13 @@ from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
 
 from mail.models import Newsletter, Client
+from mail.services import send_mail_by_time
 
 logger = logging.getLogger(__name__)
 
 
 def my_job():
-    pass
+    send_mail_by_time()
 
 
 @util.close_old_connections
@@ -41,7 +42,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             my_job,
-            trigger=CronTrigger(second="*/10"),  # Every 10 seconds
+            trigger=CronTrigger(minute="*/1"),  # Каждую минуту
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,

@@ -7,7 +7,8 @@
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
-                        <p>Вы действительно хотите удалить эту рассылку, это действие отменить невозможно.</p>
+                        <p>Вы действительно хотите удалить этого клиента из своего списка клиентов?
+                            Это действие отменить невозможно.</p>
                         <button type="submit" class="btn btn-danger">Подтвердить</button>
                         <a href="{% url 'mail:newsletter_list' %}" class="btn btn-secondary">Отмена</a>
                     </form>
