@@ -1,0 +1,25 @@
+{% extends 'mail/base.html'%}
+{% load share_media %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ object.title| title }}</h4>
+                </div>
+                <img src='{{ blog.preview | media_filter }}' alt="Product Image" class='img-fluid'>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">{{ object.content}}</h1>
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>- {{ object.created_at}}</li>
+                    </ul>
+                    <div class="card-footer">
+                        Просмотры: {{ object.view_count }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 import pytz
 from django.conf import settings
+from django.core.cache import cache
 from django.core.mail import send_mail
 
 from mail.models import Newsletter, Logs
@@ -44,7 +45,6 @@ def send_mail_by_time():
 
             if newsletter.frequency == 'daily':
                 newsletter.datetime_start_send = log.time_last_send + day
-                newsletter.save()
             elif newsletter.frequency == 'weekly':
                 newsletter.datetime_start_send = log.time_last_send + weak
             elif newsletter.frequency == 'monthly':
@@ -55,3 +55,28 @@ def send_mail_by_time():
             else:
                 newsletter.status = 'done'
             newsletter.save()
+
+
+def get_cache_for_mailings():
+    if settings.CACHE_ENABLED:
+        mailings_count = Newsletter.objects.all().count()
+        print(settings.CACHE_ENABLED)
+    else:
+        key = 'mailings_count'
+        mailings_count = cache.get(key)
+        if mailings_count is None:
+            mailings_count = Newsletter.objects.all().count()
+            cache.set(key, mailings_count)
+    return mailings_count
+
+
+def get_cache_for_active_mailings():
+    if settings.CACHE_ENABLED:
+        active_mailings_count = Newsletter.objects.filter(is_active=True).count()
+    else:
+        key = 'active_mailings_count'
+        active_mailings_count = cache.get(key)
+        if active_mailings_count is None:
+            active_mailings_count = Newsletter.objects.filter(is_active=True).count()
+            cache.set(key, active_mailings_count)
+    return active_mailings_count

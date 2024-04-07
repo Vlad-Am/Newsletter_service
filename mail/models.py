@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 
 from users.models import User
@@ -77,3 +78,9 @@ class Logs(models.Model):
     status = models.TextField(verbose_name='Статус')
     answer = models.TextField(verbose_name='Ответ сервера')
     newsletter = models.ForeignKey(Newsletter, on_delete=models.CASCADE, verbose_name='Рассылка', null=True)
+
+    def __str__(self):
+        return f'''Сообщение:{self.newsletter}\nСтатус:{self.status}\nОтвет:{self.answer}'''
+    class Meta:
+        verbose_name = 'Логи'
+        verbose_name_plural = 'Логи'

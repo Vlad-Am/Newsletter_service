@@ -22,7 +22,42 @@
         </div>
     </div>
 </section>
-
+<div class="container">
+    <div class="col-12">
+        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+            <div class="col-4">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header py-3">
+                        <h4 class="my-0 fw-normal">Всего рассылок в сервисе</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{ mailings_count }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header py-3">
+                        <h4 class="my-0 fw-normal">Всего активных рассылок</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{ active_mailings_count }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header py-3">
+                        <h4 class="my-0 fw-normal">Число уникальных клиентов</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{ clients_count }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row text-center">
     {% if user.is_authenticated %}
     {% for newsletter in object_list %}
@@ -41,7 +76,7 @@
             </div>
         </div>
     </div>
-{% endfor %}
-{% endif %}
+    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}

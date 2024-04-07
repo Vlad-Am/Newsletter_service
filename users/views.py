@@ -6,9 +6,9 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 
-from users.forms import UserRegistrationForm, UserProfileForm
+from users.forms import UserRegistrationForm, UserProfileForm, UserModeratorForm
 from users.models import User
 from config import settings
 
@@ -53,6 +53,11 @@ class ProfileView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class UsersListView(ListView):
+    model = User
+    template_name = "user/user_list.html"
 
 
 class ProfileUpdateModeratorView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):

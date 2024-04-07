@@ -34,6 +34,9 @@
                         <li><a href="{% url 'users:login' %}" class="text-white">Войти</a></li>
                         {% endif %}
                         <li><a href="{% url 'mail:newsletter_list' %}" class="text-white">На главную</a></li>
+                        {% if perms.service.set_is_active %}
+                        <li><a class="p-2 btn btn-outline-primary" href="{% url 'users:users_list' %}">Пользователи</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

@@ -19,13 +19,16 @@ class NewsletterForm(StyleFormMixin, forms.ModelForm):
         model = Newsletter
         fields = ("frequency", "message", "client", "datetime_start_send", "datetime_end_send")
 
-        # def __init__(self, *args, **kwargs):
-        #     super().__init__(*args, **kwargs)
-        #     self.fields['datetime_start_send'].widget = widgets.AdminSplitDateTime()
-        # # "start_date": DateTimeInput(
-        # #     attrs={"placeholder": "ДД.ММ.ГГГГ ЧЧ:ММ:СС",
-        # #            "type": "datetime-local"}
-        # # ),
+    datetime_start_send = forms.DateTimeField(
+        widget=forms.DateInput(attrs={'class': 'form-control',
+                                      'type': 'datetime-local'}),
+        input_formats=['%Y-%m-%dT%H:%M', ]
+    )
+    datetime_end_send = forms.DateTimeField(
+        widget=forms.DateInput(attrs={'class': 'form-control',
+                                      'type': 'datetime-local'}),
+        input_formats=['%Y-%m-%dT%H:%M', ]
+    )
 
 
 class MessageForm(StyleFormMixin, forms.ModelForm):
@@ -43,4 +46,4 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
 class NewsletterModeratorForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Newsletter
-        fields = "is_active"
+        fields = ("is_active",)
