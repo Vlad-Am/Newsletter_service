@@ -27,4 +27,4 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(Logs)
 class LogsAdmin(admin.ModelAdmin):
-    list_display = ('time_last_send', 'status', 'answer', "newsletter", "client")
+    list_display = ('time_last_send', 'status', 'answer', "newsletter",)

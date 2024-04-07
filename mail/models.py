@@ -54,11 +54,12 @@ class Newsletter(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец', null=True, blank=True)
     datetime_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания рассылки', null=True)
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOICES, verbose_name='Частота рассылки')
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, verbose_name='Статус рассылки')
+    status = models.CharField(max_length=10, default=CREATED, choices=STATUS_CHOICES, verbose_name='Статус рассылки')
     message = models.ForeignKey(Message, on_delete=models.SET_NULL, verbose_name='Сообщение', null=True)
     client = models.ManyToManyField(Client, verbose_name='Адресаты рассылки')
-    datetime_start_send = models.DateTimeField(verbose_name='Дата и время начала рассылки')
-    datetime_end_send = models.DateTimeField(verbose_name='Дата и время окончания рассылки')
+    datetime_start_send = models.DateTimeField(verbose_name='Дата и время начала рассылки ГГГГ-ММ-ДД ЧЧ:MM')
+    datetime_end_send = models.DateTimeField(verbose_name='Дата и время окончания рассылки ГГГГ-ММ-ДД ЧЧ:MM')
+    is_active = models.BooleanField(default=True, verbose_name='Активная')
 
     def __str__(self):
         return f'Сообщение:{self.message}'
@@ -66,12 +67,13 @@ class Newsletter(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
+        permissions = [
+            ('set_is_activated', 'Может отключать рассылку')
+        ]
 
 
 class Logs(models.Model):
-
     time_last_send = models.DateTimeField(auto_now=True, verbose_name='Дата и время последней попытки')
     status = models.TextField(verbose_name='Статус')
     answer = models.TextField(verbose_name='Ответ сервера')
     newsletter = models.ForeignKey(Newsletter, on_delete=models.CASCADE, verbose_name='Рассылка', null=True)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Клиент')

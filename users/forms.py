@@ -22,3 +22,8 @@ class UserProfileForm(StyleFormMixin, UserChangeForm):
 
         self.fields['password'].widget = forms.HiddenInput()
 
+
+class UserModeratorForm(StyleFormMixin, UserChangeForm):
+    class Meta:
+        model = User
+        fields = 'is_active'

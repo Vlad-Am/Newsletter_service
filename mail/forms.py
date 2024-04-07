@@ -17,7 +17,7 @@ class StyleFormMixin(forms.Form):
 class NewsletterForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Newsletter
-        fields = ("frequency", "message", "status", "client", "datetime_start_send", "datetime_end_send")
+        fields = ("frequency", "message", "client", "datetime_start_send", "datetime_end_send")
 
         # def __init__(self, *args, **kwargs):
         #     super().__init__(*args, **kwargs)
@@ -40,5 +40,7 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
         fields = ("name", "surname", "email")
 
 
-
-
+class NewsletterModeratorForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Newsletter
+        fields = "is_active"

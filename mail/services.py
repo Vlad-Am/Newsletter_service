@@ -12,20 +12,16 @@ def send_mail_by_time():
     """Отправка письма по времени"""
     zone = pytz.timezone(settings.TIME_ZONE)
     current_datetime = datetime.now(zone)
-    day = timedelta(days=1)
-    weak = timedelta(days=7)
-    month = timedelta(days=30)
-    newsletter_list = Newsletter.objects.all().filter(status='Cоздана')
-    print(newsletter_list)
+    newsletter_list = Newsletter.objects.all().filter(status="created")
     for newsletter in newsletter_list:
-        if newsletter.time_start <= current_datetime < newsletter.time_end:
+        if newsletter.datetime_start_send <= current_datetime < newsletter.datetime_end_send:
 
-            newsletter.status = 'Активная'
+            newsletter.status = 'started'
             newsletter.save()
             emails_list = [client.email for client in newsletter.client.all()]
 
             try:
-                send_mail(
+                answer = send_mail(
                     subject=newsletter.message.subject,
                     message=newsletter.message.message,
                     from_email=settings.EMAIL_HOST_USER,
@@ -33,21 +29,29 @@ def send_mail_by_time():
                     fail_silently=False,
                 )
                 status = 'Отправлено'
+                log = Logs(newsletter=newsletter, status=status, answer=answer)
+                log.save()
+
             except smtplib.SMTPException as error:
-                status = f'Ошибка отправки {error}'
+                status = "Не отправлено"
+                answer = f'Ошибка отправки {error}'
+                log = Logs(newsletter=newsletter, status=status, answer=answer)
+                log.save()
 
-            log = Logs(newsletter=newsletter, status=status)
-            log.save()
+            day = timedelta(days=1)
+            weak = timedelta(days=7)
+            month = timedelta(days=30)
 
-            if newsletter.frequency == 'раз в день':
+            if newsletter.frequency == 'daily':
                 newsletter.datetime_start_send = log.time_last_send + day
-            elif newsletter.frequency == 'раз в неделю':
+                newsletter.save()
+            elif newsletter.frequency == 'weekly':
                 newsletter.datetime_start_send = log.time_last_send + weak
-            elif newsletter.frequency == 'раз в месяц':
+            elif newsletter.frequency == 'monthly':
                 newsletter.datetime_start_send = log.time_last_send + month
 
             if newsletter.datetime_start_send < newsletter.datetime_end_send:
-                newsletter.status = 'Создана'
+                newsletter.status = 'created'
             else:
-                newsletter.status = 'Завершена'
+                newsletter.status = 'done'
             newsletter.save()

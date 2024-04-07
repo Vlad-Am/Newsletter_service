@@ -4,8 +4,8 @@
 <section class="py-5 text-center container">
     <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">Сервис по отправке рассылок</h1>
-            <p class="lead text-muted">Отправка сообщений по всем регионам с возможностью отложенного отправления</p>
+            <h1 class="fw-light">Список ваших сообщений</h1>
+            <p class="lead text-muted">Рассылка.Да - Отправка сообщений по всем регионам с возможностью отложенного отправления</p>
             <p>
                 <a href="{% url 'mail:message_create' %}" class="btn btn-primary my-2 form-control">Создать
                     сообщение</a>
@@ -13,9 +13,8 @@
         </div>
     </div>
 </section>
-
-{% for message in object_list %}
 <div class="row text-center">
+{% for message in object_list %}
         <div class="col-sm-5 mb-3 mb-sm-5">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
@@ -29,7 +28,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-{% endfor %}
+ {% endfor %}
+</div>
 {% endblock %}

@@ -4,32 +4,31 @@
 <section class="py-5 text-center container">
     <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">Сервис по отправке рассылок</h1>
-            <p class="lead text-muted">Отправка сообщений по всем регионам с возможностью отложенного отправления</p>
+            <h1 class="fw-light">Список ваших клиентов</h1>
+            <p class="lead text-muted">Рассылка.Да - Отправка сообщений по всем регионам с возможностью отложенного отправления</p>
             <p>
                 <a href="{% url 'mail:client_create' %}" class="btn btn-primary my-2 form-control">Создать клиента</a>
             </p>
         </div>
     </div>
 </section>
-
-{% for client in object_list %}
 <div class="row text-center">
-        <div class="col-sm-5 mb-3 mb-sm-5">
-            <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{ client.name| title }}</h4>
-                    <h4 class="my-0 font-weight-normal">{{ client.surname| title }}</h4>
-                </div>
-                <div class="card-body">
-                    <a href="{% url 'mail:client_detail' pk=client.pk %}">
-                        <button type="button" class="btn btn-lg btn-block btn-light form-control">Посмотреть
-                        </button>
-                    </a>
-                </div>
+    {% for client in object_list %}
+
+    <div class="col-sm-5 mb-3 mb-sm-5">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{ client.name| title }}</h4>
+                <h4 class="my-0 font-weight-normal">{{ client.surname| title }}</h4>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'mail:client_detail' pk=client.pk %}">
+                    <button type="button" class="btn btn-lg btn-block btn-light form-control">Посмотреть
+                    </button>
+                </a>
             </div>
         </div>
     </div>
-
-{% endfor %}
+    {% endfor %}
+</div>
 {% endblock %}

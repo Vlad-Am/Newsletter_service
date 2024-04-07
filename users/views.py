@@ -1,6 +1,7 @@
 import secrets
 import time
 
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
@@ -52,6 +53,13 @@ class ProfileView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class ProfileUpdateModeratorView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = User
+    form_class = UserModeratorForm
+    success_url = reverse_lazy('mail:mail_list')
+    permission_required = 'user.set_is_activated'
 
 
 class UserResetPasswordView(PasswordResetView):

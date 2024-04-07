@@ -1,14 +1,19 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from mail.forms import NewsletterForm, ClientForm, MessageForm
+from mail.forms import NewsletterForm, ClientForm, MessageForm, NewsletterModeratorForm
 from mail.models import Newsletter, Client, Message
 
 
 class ClientListView(LoginRequiredMixin, ListView):
     model = Client
+
+    def get_queryset(self):
+        super().get_queryset()
+        queryset = Client.objects.filter(owner=self.request.user)
+        return queryset
 
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
@@ -42,6 +47,11 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
 
+    def get_queryset(self):
+        super().get_queryset()
+        queryset = Message.objects.filter(owner=self.request.user)
+        return queryset
+
 
 class MessageDetailView(LoginRequiredMixin, DetailView):
     model = Message
@@ -69,6 +79,13 @@ class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     success_url = reverse_lazy('mail:message_list')
     form_class = MessageForm
+
+
+class MailUpdateModeratorView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = Newsletter
+    form_class = NewsletterModeratorForm
+    success_url = reverse_lazy('mail:mail_list')
+    permission_required = 'mail.set_is_activated'
 
 
 class NewsletterListView(ListView):
