@@ -1,4 +1,5 @@
 {% extends 'mail/base.html' %}
+{% load share_media %}
 {% block content %}
 
 <section class="py-5 text-center container">
@@ -22,61 +23,100 @@
         </div>
     </div>
 </section>
-<div class="container">
+
+<div class="container text-center">
+    <h1 class="fw-light">Блог</h1>
     <div class="col-12">
         <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-            <div class="col-4">
-                <div class="card mb-4 rounded-3 shadow-sm">
-                    <div class="card-header py-3">
-                        <h4 class="my-0 fw-normal">Всего рассылок в сервисе</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">{{ mailings_count }}</h1>
+            {% for blog in blog_list %}
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ blog.title| title }}</h4>
+                </div>
+                <img src='{{ blog.preview | media_filter }}' alt="Product Image" class='img-fluid'>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">
+                        {% if blog.content|length < 100 %}
+                        {{ blog.content}}
+                        {% else %}
+                        {{ blog.content|truncatechars:100 }}
+                        {% endif %}
+                    </h1>
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>- {{ blog.created_at}}</li>
+                    </ul>
+                    <div class="card-footer">
+                        Просмотры: {{ blog.view_count }}
                     </div>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="card mb-4 rounded-3 shadow-sm">
-                    <div class="card-header py-3">
-                        <h4 class="my-0 fw-normal">Всего активных рассылок</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">{{ active_mailings_count }}</h1>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <div class="container text-center">
+        <h1 class="fw-light">Статистика</h1>
+        <div class="col-12">
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+                <div class="col-4">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0 fw-normal">Всего рассылок в сервисе</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ mailings_count }}</h1>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="card mb-4 rounded-3 shadow-sm">
-                    <div class="card-header py-3">
-                        <h4 class="my-0 fw-normal">Число уникальных клиентов</h4>
+                <div class="col-4">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0 fw-normal">Всего активных рассылок</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ active_mailings_count }}</h1>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">{{ clients_count }}</h1>
+                </div>
+                <div class="col-4">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0 fw-normal">Число уникальных клиентов</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ clients_count }}</h1>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="row text-center">
-    {% if user.is_authenticated %}
-    {% for newsletter in object_list %}
-    <div class="col-4 mb-3 mb-sm-5">
-        <div class="card mb-4 box-shadow">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal"> Владелец:{{ newsletter.owner| title }}</h4>
+
+        <h1 class="fw-light">Рассылки</h1>
+        <div class="row text-center">
+            {% if user.is_authenticated %}
+            {% for newsletter in object_list %}
+            <div class="col-4 mb-3 mb-sm-5">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal"> Рассылка № {{ newsletter.pk }}</h4>
+                    </div>
+                    <div class="card-body">
+
+                        <h5 class="card-title pricing-card-title">Владелец:
+                            {{ newsletter.owner }}</h5>
+                        <h4 class="card-title pricing-card-title">Статус: {{ newsletter.status }}</h4>
+                        <h5 class="card-title pricing-card-title">Тема: {{ newsletter.message.subject }}</h5>
+                        <a href="{% url 'mail:newsletter_detail' pk=newsletter.pk %}">
+                            <button type="button" class="btn btn-lg btn-block btn-light form-control">Посмотреть
+                            </button>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <h4 class="card-title pricing-card-title">Статус: {{ newsletter.status }}</h4>
-                <h5 class="card-title pricing-card-title">Тема: {{ newsletter.message.subject }}</h5>
-                <a href="{% url 'mail:newsletter_detail' pk=newsletter.pk %}">
-                    <button type="button" class="btn btn-lg btn-block btn-light form-control">Посмотреть
-                    </button>
-                </a>
-            </div>
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
-    {% endfor %}
-    {% endif %}
 </div>
 {% endblock %}

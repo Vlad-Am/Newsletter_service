@@ -1,7 +1,6 @@
 import random
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -102,6 +101,7 @@ class NewsletterListView(ListView):
         blog_list = list(Blog.objects.all())
         random.shuffle(blog_list)
         context_data['blog_list'] = blog_list[:3]
+        print(context_data)
         context_data['clients_count'] = len(Client.objects.all())
         return context_data
 
@@ -134,10 +134,11 @@ class NewsletterCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
+class NewsletterUpdateView(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
     model = Newsletter
     success_url = reverse_lazy('mail:newsletter_list')
     form_class = NewsletterForm
+    permission_required = 'mail.set_is_activated'
 
     def get_success_url(self, *args, **kwargs):
         super().get_success_url()

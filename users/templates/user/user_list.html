@@ -1,20 +1,21 @@
 {% extends 'mail/base.html' %}
 {% block content %}
-    <div class="container">
-        <div class="row">
-            {% for user in object_list %}
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]"
-                             style="height: 225px; width: 100%; display: block;"
-                             src="{{ user.avatar.url }}" data-holder-rendered="true">
-                        <div class="card-body">
-                            <p class="card-text">{{ user.email }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <a href="{% url 'users:user_detail' user.pk %}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
-                                </div>
-                            </div>
+    <div class="header mx-auto text-center">
+        <h5 class="display-4">{{ title }}</h5>
+    </div>
+    <div class="col-12">
+        <div class="row mb-3">
+            {% for object in object_list %}
+                <div class="col-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="my-0 font-weight-normal mb-3">Пользователь: {{ object.email }}</h3>
+                            {% if not object.is_active %}
+                                <p>Заблокирован</p>
+                            {% else %}
+                                <p>Активный</p>
+                            {% endif %}
+                            <a class="p-2 btn btn-outline-primary" href="{% url 'users:edit' object.pk %}">Редактировать</a>
                         </div>
                     </div>
                 </div>

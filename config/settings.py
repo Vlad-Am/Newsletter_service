@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-9od@0n1_)#)sgjb14b&wfl%pu(i3=c9dsw3)8xevil7+4*23%_'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = True
 
@@ -58,9 +58,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mailing',
-        'USER': 'postgres',
-        'PASSWORD': '1'
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
     }
 }
 
@@ -116,6 +116,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = 'user/login/'
 
 CACHE_ENABLED = os.environ.get('CACHE_ENABLED')
 
@@ -123,6 +124,6 @@ if CACHE_ENABLED:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': 'redis://127.0.0.1:6379'
+            'LOCATION': os.environ.get('REDIS_URL')
         }
     }

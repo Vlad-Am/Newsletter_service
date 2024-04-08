@@ -60,7 +60,6 @@ def send_mail_by_time():
 def get_cache_for_mailings():
     if settings.CACHE_ENABLED:
         mailings_count = Newsletter.objects.all().count()
-        print(settings.CACHE_ENABLED)
     else:
         key = 'mailings_count'
         mailings_count = cache.get(key)
