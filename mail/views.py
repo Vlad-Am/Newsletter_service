@@ -1,13 +1,16 @@
 import random
 
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
 from blog.models import Blog
-from mail.forms import NewsletterForm, ClientForm, MessageForm, NewsletterModeratorForm
-from mail.models import Newsletter, Client, Message, Logs
-from mail.services import get_cache_for_mailings, get_cache_for_active_mailings
+from mail.forms import (ClientForm, MessageForm, NewsletterForm,
+                        NewsletterModeratorForm)
+from mail.models import Client, Logs, Message, Newsletter
+from mail.services import get_cache_for_active_mailings, get_cache_for_mailings
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -25,7 +28,7 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
 
 class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Client
-    success_url = reverse_lazy('mail:newsletter_list')
+    success_url = reverse_lazy("mail:newsletter_list")
     form_class = ClientForm
 
     def form_valid(self, form):
@@ -38,13 +41,13 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
-    success_url = reverse_lazy('mail:client_list')
+    success_url = reverse_lazy("mail:client_list")
     form_class = ClientForm
 
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client
-    success_url = reverse_lazy('mail:client_list')
+    success_url = reverse_lazy("mail:client_list")
 
 
 class MessageListView(LoginRequiredMixin, ListView):
@@ -62,7 +65,7 @@ class MessageDetailView(LoginRequiredMixin, DetailView):
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
-    success_url = reverse_lazy('mail:newsletter_list')
+    success_url = reverse_lazy("mail:newsletter_list")
     form_class = MessageForm
 
     def form_valid(self, form):
@@ -75,20 +78,20 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 
 class MessageDeleteView(LoginRequiredMixin, DeleteView):
     model = Message
-    success_url = reverse_lazy('mail:message_list')
+    success_url = reverse_lazy("mail:message_list")
 
 
 class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
-    success_url = reverse_lazy('mail:message_list')
+    success_url = reverse_lazy("mail:message_list")
     form_class = MessageForm
 
 
 class MailUpdateModeratorView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Newsletter
     form_class = NewsletterModeratorForm
-    success_url = reverse_lazy('mail:mail_list')
-    permission_required = 'mail.set_is_activated'
+    success_url = reverse_lazy("mail:mail_list")
+    permission_required = "mail.set_is_activated"
 
 
 class NewsletterListView(ListView):
@@ -96,13 +99,13 @@ class NewsletterListView(ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['mailings_count'] = get_cache_for_mailings()
-        context_data['active_mailings_count'] = get_cache_for_active_mailings()
+        context_data["mailings_count"] = get_cache_for_mailings()
+        context_data["active_mailings_count"] = get_cache_for_active_mailings()
         blog_list = list(Blog.objects.all())
         random.shuffle(blog_list)
-        context_data['blog_list'] = blog_list[:3]
+        context_data["blog_list"] = blog_list[:3]
         print(context_data)
-        context_data['clients_count'] = len(Client.objects.all())
+        context_data["clients_count"] = len(Client.objects.all())
         return context_data
 
 
@@ -111,19 +114,19 @@ class NewsletterDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['clients'] = list(self.object.client.all())
-        context_data['logs'] = list(Logs.objects.filter(newsletter=self.object))
+        context_data["clients"] = list(self.object.client.all())
+        context_data["logs"] = list(Logs.objects.filter(newsletter=self.object))
         return context_data
 
 
 class NewsletterDeleteView(LoginRequiredMixin, DeleteView):
     model = Newsletter
-    success_url = reverse_lazy('mail:newsletter_list')
+    success_url = reverse_lazy("mail:newsletter_list")
 
 
 class NewsletterCreateView(LoginRequiredMixin, CreateView):
     model = Newsletter
-    success_url = reverse_lazy('mail:newsletter_list')
+    success_url = reverse_lazy("mail:newsletter_list")
     form_class = NewsletterForm
 
     def form_valid(self, form):
@@ -134,12 +137,12 @@ class NewsletterCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class NewsletterUpdateView(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
+class NewsletterUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Newsletter
-    success_url = reverse_lazy('mail:newsletter_list')
+    success_url = reverse_lazy("mail:newsletter_list")
     form_class = NewsletterForm
-    permission_required = 'mail.set_is_activated'
+    permission_required = "mail.set_is_activated"
 
     def get_success_url(self, *args, **kwargs):
         super().get_success_url()
-        return reverse_lazy('mail:newsletter_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy("mail:newsletter_detail", kwargs={"pk": self.object.pk})

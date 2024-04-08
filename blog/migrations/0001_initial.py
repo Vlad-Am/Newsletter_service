@@ -7,24 +7,52 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Blog',
+            name="Blog",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100, verbose_name='Заголовок')),
-                ('content', models.TextField(blank=True, null=True, verbose_name='Содержание')),
-                ('preview', models.ImageField(blank=True, null=True, upload_to='catalog/blog', verbose_name='Изображение')),
-                ('view_count', models.IntegerField(default=0, verbose_name='Количество просмотров')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100, verbose_name="Заголовок")),
+                (
+                    "content",
+                    models.TextField(blank=True, null=True, verbose_name="Содержание"),
+                ),
+                (
+                    "preview",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="catalog/blog",
+                        verbose_name="Изображение",
+                    ),
+                ),
+                (
+                    "view_count",
+                    models.IntegerField(
+                        default=0, verbose_name="Количество просмотров"
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Дата создания"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'публикация',
-                'verbose_name_plural': 'публикации',
-                'ordering': ('title', 'created_at', 'view_count'),
+                "verbose_name": "публикация",
+                "verbose_name_plural": "публикации",
+                "ordering": ("title", "created_at", "view_count"),
             },
         ),
     ]

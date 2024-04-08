@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.mail import send_mail
 
-from mail.models import Newsletter, Logs
+from mail.models import Logs, Newsletter
 
 
 def send_mail_by_time():
@@ -15,9 +15,13 @@ def send_mail_by_time():
     current_datetime = datetime.now(zone)
     newsletter_list = Newsletter.objects.all().filter(status="created")
     for newsletter in newsletter_list:
-        if newsletter.datetime_start_send <= current_datetime < newsletter.datetime_end_send:
+        if (
+            newsletter.datetime_start_send
+            <= current_datetime
+            < newsletter.datetime_end_send
+        ):
 
-            newsletter.status = 'started'
+            newsletter.status = "started"
             newsletter.save()
             emails_list = [client.email for client in newsletter.client.all()]
 
@@ -29,13 +33,13 @@ def send_mail_by_time():
                     recipient_list=emails_list,
                     fail_silently=False,
                 )
-                status = 'Отправлено'
+                status = "Отправлено"
                 log = Logs(newsletter=newsletter, status=status, answer=answer)
                 log.save()
 
             except smtplib.SMTPException as error:
                 status = "Не отправлено"
-                answer = f'Ошибка отправки {error}'
+                answer = f"Ошибка отправки {error}"
                 log = Logs(newsletter=newsletter, status=status, answer=answer)
                 log.save()
 
@@ -43,17 +47,17 @@ def send_mail_by_time():
             weak = timedelta(days=7)
             month = timedelta(days=30)
 
-            if newsletter.frequency == 'daily':
+            if newsletter.frequency == "daily":
                 newsletter.datetime_start_send = log.time_last_send + day
-            elif newsletter.frequency == 'weekly':
+            elif newsletter.frequency == "weekly":
                 newsletter.datetime_start_send = log.time_last_send + weak
-            elif newsletter.frequency == 'monthly':
+            elif newsletter.frequency == "monthly":
                 newsletter.datetime_start_send = log.time_last_send + month
 
             if newsletter.datetime_start_send < newsletter.datetime_end_send:
-                newsletter.status = 'created'
+                newsletter.status = "created"
             else:
-                newsletter.status = 'done'
+                newsletter.status = "done"
             newsletter.save()
 
 
@@ -61,7 +65,7 @@ def get_cache_for_mailings():
     if settings.CACHE_ENABLED:
         mailings_count = Newsletter.objects.all().count()
     else:
-        key = 'mailings_count'
+        key = "mailings_count"
         mailings_count = cache.get(key)
         if mailings_count is None:
             mailings_count = Newsletter.objects.all().count()
@@ -73,7 +77,7 @@ def get_cache_for_active_mailings():
     if settings.CACHE_ENABLED:
         active_mailings_count = Newsletter.objects.filter(is_active=True).count()
     else:
-        key = 'active_mailings_count'
+        key = "active_mailings_count"
         active_mailings_count = cache.get(key)
         if active_mailings_count is None:
             active_mailings_count = Newsletter.objects.filter(is_active=True).count()
