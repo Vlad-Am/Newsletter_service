@@ -14,6 +14,9 @@
 и заполните файл .env.sample переименовав до .env
 Используйте команду 
 
-#### python manage.py loaddata db.json
+Для загрузки данных используйте команду 
+#### python manage.py loaddata db.json 
+
 и
-#### python manage.py runserver для запуска сервера 
+Для запуска сервера 
+#### python manage.py runserver 
