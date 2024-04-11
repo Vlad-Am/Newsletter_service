@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.db import models
 
 from users.models import User
@@ -8,7 +9,7 @@ class Message(models.Model):
     message = models.TextField(verbose_name="Сообщение")
     subject = models.TextField(verbose_name="Тема письма")
     owner = models.ForeignKey(
-        User, verbose_name="Владелец", on_delete=models.CASCADE, null=True, blank=True
+        settings.AUTH_USER_MODEL, verbose_name="Владелец", on_delete=models.CASCADE, null=True, blank=True
     )
 
     def __str__(self):
@@ -26,7 +27,7 @@ class Client(models.Model):
         unique=True, max_length=254, verbose_name="Электронная почта"
     )
     owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="Владелец", null=True, blank=True
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец", null=True, blank=True
     )
 
     def __str__(self):
@@ -59,7 +60,7 @@ class Newsletter(models.Model):
     ]
 
     owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="Владелец", null=True, blank=True
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец", null=True, blank=True
     )
     datetime_create = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата создания рассылки", null=True
@@ -74,7 +75,7 @@ class Newsletter(models.Model):
         verbose_name="Статус рассылки",
     )
     message = models.ForeignKey(
-        Message, on_delete=models.SET_NULL, verbose_name="Сообщение", null=True
+        "mail.Message", on_delete=models.SET_NULL, verbose_name="Сообщение", null=True
     )
     client = models.ManyToManyField(Client, verbose_name="Адресаты рассылки")
     datetime_start_send = models.DateTimeField(

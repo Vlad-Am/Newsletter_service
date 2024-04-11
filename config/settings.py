@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+load_dotenv()
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = True
@@ -58,9 +58,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "NAME": os.environ.get("NAME_DB"),
+        "USER": os.environ.get("USER_DB"),
+        "PASSWORD": os.environ.get("PASSWORD_DB"),
     }
 }
 
@@ -101,8 +101,6 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25
 EMAIL_HOST = "smtp.mail.ru"
 EMAIL_PORT = 2525
 
-
-load_dotenv()
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
