@@ -1,0 +1,64 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$45hQs25kBier3ljqNulZfY$4WqoSBhDQj498mLnjzLCKubRtSBd9WhU12MNm3MeNPI=",
+      "last_login": "2024-04-11T18:37:55.583Z",
+      "is_superuser": true,
+      "first_name": "Admin",
+      "last_name": "SkyPro",
+      "is_staff": true,
+      "date_joined": "2024-04-11T18:31:40.549Z",
+      "email": "vlad",
+      "phone": null,
+      "avatar": "",
+      "token": null,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$5kGhz3XFdZgE9WM8StumWC$CHmc/oJgoGLhxYpDrIGc+rF+MS+7wMUEqo1fEBye4nU=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "date_joined": "2024-04-11T18:35:07Z",
+      "email": "vladamirov1980@gmail.com",
+      "phone": null,
+      "avatar": "",
+      "token": "6110b0fc0768c47fe0d69da8fccd5f01",
+      "is_active": true,
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$5YQSqyzAq10ipsePvk4Scs$5H86rqSn53LaHkSJk8FCA32ADeAzW35ymSU5TQY+l8k=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "date_joined": "2024-04-11T18:37:27.826Z",
+      "email": "sashatash234@gmail.com",
+      "phone": null,
+      "avatar": "",
+      "token": "e97f150e43e3251b838fe04be3e5b4e3",
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

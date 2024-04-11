@@ -14,51 +14,52 @@ def send_mail_by_time():
     zone = pytz.timezone(settings.TIME_ZONE)
     current_datetime = datetime.now(zone)
     newsletter_list = Newsletter.objects.all().filter(status="created")
-    for newsletter in newsletter_list:
-        if (
-            newsletter.datetime_start_send
-            <= current_datetime
-            < newsletter.datetime_end_send
-        ):
+    if newsletter_list:
+        for newsletter in newsletter_list:
+            if (
+                newsletter.datetime_start_send
+                <= current_datetime
+                < newsletter.datetime_end_send
+            ):
 
-            newsletter.status = "started"
-            newsletter.save()
-            emails_list = [client.email for client in newsletter.client.all()]
+                newsletter.status = "started"
+                newsletter.save()
+                emails_list = [client.email for client in newsletter.client.all()]
 
-            try:
-                answer = send_mail(
-                    subject=newsletter.message.subject,
-                    message=newsletter.message.message,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=emails_list,
-                    fail_silently=False,
-                )
-                status = "Отправлено"
-                log = Logs(newsletter=newsletter, status=status, answer=answer)
-                log.save()
+                try:
+                    answer = send_mail(
+                        subject=newsletter.message.subject,
+                        message=newsletter.message.message,
+                        from_email=settings.EMAIL_HOST_USER,
+                        recipient_list=emails_list,
+                        fail_silently=False,
+                    )
+                    status = "Отправлено"
+                    log = Logs(newsletter=newsletter, status=status, answer=answer)
+                    log.save()
 
-            except smtplib.SMTPException as error:
-                status = "Не отправлено"
-                answer = f"Ошибка отправки {error}"
-                log = Logs(newsletter=newsletter, status=status, answer=answer)
-                log.save()
+                except smtplib.SMTPException as error:
+                    status = "Не отправлено"
+                    answer = f"Ошибка отправки {error}"
+                    log = Logs(newsletter=newsletter, status=status, answer=answer)
+                    log.save()
 
-            day = timedelta(days=1)
-            weak = timedelta(days=7)
-            month = timedelta(days=30)
+                day = timedelta(days=1)
+                weak = timedelta(days=7)
+                month = timedelta(days=30)
 
-            if newsletter.frequency == "daily":
-                newsletter.datetime_start_send = log.time_last_send + day
-            elif newsletter.frequency == "weekly":
-                newsletter.datetime_start_send = log.time_last_send + weak
-            elif newsletter.frequency == "monthly":
-                newsletter.datetime_start_send = log.time_last_send + month
+                if newsletter.frequency == "daily":
+                    newsletter.datetime_start_send = log.time_last_send + day
+                elif newsletter.frequency == "weekly":
+                    newsletter.datetime_start_send = log.time_last_send + weak
+                elif newsletter.frequency == "monthly":
+                    newsletter.datetime_start_send = log.time_last_send + month
 
-            if newsletter.datetime_start_send < newsletter.datetime_end_send:
-                newsletter.status = "created"
-            else:
-                newsletter.status = "done"
-            newsletter.save()
+                if newsletter.datetime_start_send < newsletter.datetime_end_send:
+                    newsletter.status = "created"
+                else:
+                    newsletter.status = "done"
+                newsletter.save()
 
 
 def get_cache_for_mailings():

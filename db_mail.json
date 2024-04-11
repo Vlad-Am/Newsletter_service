@@ -1,0 +1,104 @@
+[
+  {
+    "model": "mail.message",
+    "pk": 1,
+    "fields": {
+      "message": "��������� � 9 00 ���� ���� ��� ���������!",
+      "subject": "����������� � ���������",
+      "owner": 1
+    }
+  },
+  {
+    "model": "mail.message",
+    "pk": 2,
+    "fields": {
+      "message": "� ����� � 8 30 �� ���������!",
+      "subject": "����������� � �����",
+      "owner": 1
+    }
+  },
+  {
+    "model": "mail.client",
+    "pk": 1,
+    "fields": {
+      "name": "Alex",
+      "surname": "Base",
+      "email": "sashatash234@gmail.com",
+      "owner": 1
+    }
+  },
+  {
+    "model": "mail.client",
+    "pk": 2,
+    "fields": {
+      "name": "vlad",
+      "surname": "base",
+      "email": "vladamirov1980@gmail.com",
+      "owner": 1
+    }
+  },
+  {
+    "model": "mail.client",
+    "pk": 3,
+    "fields": {
+      "name": "qwer",
+      "surname": "test",
+      "email": "vladamirov@list.ru",
+      "owner": 1
+    }
+  },
+  {
+    "model": "mail.newsletter",
+    "pk": 1,
+    "fields": {
+      "owner": 2,
+      "datetime_create": "2024-04-11T18:38:31.665Z",
+      "frequency": "daily",
+      "status": "created",
+      "message": 1,
+      "datetime_start_send": "2024-04-12T18:39:59.663Z",
+      "datetime_end_send": "2024-04-15T18:38:20Z",
+      "is_active": true,
+      "client": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail.newsletter",
+    "pk": 2,
+    "fields": {
+      "owner": 3,
+      "datetime_create": "2024-04-11T18:38:46.779Z",
+      "frequency": "daily",
+      "status": "created",
+      "message": 2,
+      "datetime_start_send": "2024-04-12T18:40:00.981Z",
+      "datetime_end_send": "2024-04-15T18:38:43Z",
+      "is_active": true,
+      "client": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "mail.logs",
+    "pk": 1,
+    "fields": {
+      "time_last_send": "2024-04-11T18:39:59.663Z",
+      "status": "����������",
+      "answer": "1",
+      "newsletter": 1
+    }
+  },
+  {
+    "model": "mail.logs",
+    "pk": 2,
+    "fields": {
+      "time_last_send": "2024-04-11T18:40:00.981Z",
+      "status": "����������",
+      "answer": "1",
+      "newsletter": 2
+    }
+  }
+]
