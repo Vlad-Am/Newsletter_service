@@ -15,7 +15,9 @@
 Используйте команду 
 
 Для загрузки данных используйте команду 
-#### python manage.py loaddata db.json 
+#### python manage.py loaddata db_blog.json 
+#### python manage.py loaddata db_mail.json 
+#### python manage.py loaddata db_users.json 
 
 и
 Для запуска сервера 
