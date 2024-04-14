@@ -104,7 +104,6 @@ class NewsletterListView(ListView):
         blog_list = list(Blog.objects.all())
         random.shuffle(blog_list)
         context_data["blog_list"] = blog_list[:3]
-        print(context_data)
         context_data["clients_count"] = len(Client.objects.all())
         return context_data
 
