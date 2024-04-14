@@ -1,5 +1,6 @@
 from time import sleep
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from django.apps import AppConfig
 
 
@@ -11,4 +12,7 @@ class MailConfig(AppConfig):
         from mail.services import send_mail_by_time
 
         sleep(2)
-        send_mail_by_time()
+
+        scheduler = BackgroundScheduler()
+        scheduler.add_job(send_mail_by_time, 'interval', minutes=1)
+        scheduler.start()
